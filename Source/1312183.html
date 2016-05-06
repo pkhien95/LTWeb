@@ -12,76 +12,108 @@
 			<div class="col-md-1"></div>
 
 			<!--Main page-->
-			<div id="page" class="container-fluid col-md-10" ng-app="linkedin" ng-controller="userProfile">
+			<div id="page" class="container-fluid col-md-10" ng-app="linkedin" ng-controller="userProfile as up">
 				<div class="summary container-fluid">
 					<div class="profile-card-top container-fluid">
 						<div class="col-md-4 profile-image">
-							<img class="img-responsive" src="./images/profile_image.jpg" alt="profile-image">
+							<img class="image" ng-src="{{avatar}}" alt="profile-image">
+							<button class="button" ng-click="editPhoto()">Change photo</button>
+							<input type="file" id="changePhotoInput" ng-model="avatar" file-model="avatar" ng-change="uploadPhoto()"></input>
 						</div>
 
 						<div class="col-md-8">
 							<div class="basic-info">
 								<div class="name">
-									<h1 ng-model="name">{{name}}</h1>
+									<h1 id="textName" ng-mouseover="nameMouseOver()" ng-mouseleave="nameMouseLeave()" ng-click="textNameClick()">{{name}}</h1>
+									<button type="button" id="editNameButton" class="editButton"></button>
+									<textarea id="editTextName" class="editTextName" value="{{name}}" rows="1" ng-blur="completeEditTextName()">{{name}}</textarea>
 								</div>
 								<div class="headline">
-									<h3>{{experience[0].position + " at " + experience[0].company}}</h3>
+									<h3 id="textHeadline" ng-mouseover="headlineMouseOver()" ng-mouseleave="headlineMouseLeave()" ng-click="textHeadlineClick()">{{experience[0].position + " at " + experience[0].company}}</h3>
+									<button type="button" id="editHeadlineButton" class="editButton"></button>
+									<textarea id="editTextHeadline" class="editTextHeadline" rows="1" ng-blur="completeEditTextHeadline()">{{experience[0].position + " at " + experience[0].company}}</textarea>
 								</div>
-								<div class="location">
+								<div class="location" id="location" ng-mouseover="locationMouseOver()" ng-mouseleave="locationMouseLeave()" ng-click="locationClick()">
 									<ul>
 										<li>
-											<a href="#">San Francisco Bay Area</a>
+											<a href="#" id="textAdress">{{address}}</a>
 										</li>
 										<li>|</li>
 										<li>
-											<a href="#">Internet</a>
+											<a href="#"  id="textIndustry">{{industry}}</a>
 										</li>
 									</ul>
+									<button type="button" id="locationEditButton" class="editButton" data-toggle="modal" data-target="#modalLocation"></button>
+
+									<div id="modalLocation" class="modal fade" role="dialog">
+										<div class="modal-dialog modal-sm">
+										<!-- Modal content-->
+											<div class="modal-content">
+											  <div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal">&times</button>
+													<h4 class="modal-title">Edit address and industry</h4>
+											  </div>
+											  <div class="modal-body">
+											    <div class="form-group">
+											    	<label>Address</label>
+											    	<input type="text" value="{{address}}" id="editAddress"></input>
+											    </div>
+											    <div class="form-group">
+											    	<label>Industry</label>
+											    	<input type="text" value="{{industry}}" id="editIndustry"></input>
+											    </div>
+											  </div>
+											  <div class="modal-footer">
+											  	<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="saveLocation()">Save</button>
+											    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+											  </div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
-							<div class="detail">
-								<div class="col-md-2 no-padding">
-									<p>Current</p>
+							<div class="detail container-fluid">
+								<div class="current">
+									<div class="col-md-2 no-padding textCurrent">
+										<p>Current</p>
+									</div>
+									<div class="col-md-10 no-padding detailCurrent"  ng-mouseover="currentMouseOver()" ng-mouseleave="currentMouseLeave()">
+										<p ng-repeat="ex in current">{{ex.company + ", &nbsp"}}</p>	
+										<button type="button" id="currentEditButton" class="editButton" ng-click="scrollTo('experience')"></button>
+									</div>
 								</div>
-								<div class="col-md-10 no-padding">
-									<p ng-repeat="ex in experience" class="pull-left">{{ex.company + ", &nbsp"}}</p>
+								<div class="col-md-12">
 								</div>
-
-								<div class="col-md-2 no-padding">
-									<p>Previous</p>
+								<div class="previous" >
+									<div class="col-md-2 no-padding textPrevious"> 
+										<p>Previous</p>
+									</div>
+									<div class="col-md-10 no-padding detailPrevious" ng-mouseover="previousMouseOver()" ng-mouseleave="previousMouseLeave()">
+										<p ng-repeat="ex in previous" >{{ex.company + ", &nbsp"}}</p>
+										<button type="button" id="previousEditButton" class="editButton" ng-click="scrollTo('experience')"></button>
+									</div>
 								</div>
-								<div class="col-md-10 no-padding">
-									<p>Malaria No More, Accel Partners, Greylock</p>
+								<div class="col-md-12">
 								</div>
-
-								<div class="col-md-2 no-padding">
-									<p>Education</p>
-								</div>
-								<div class="col-md-10 no-padding">
-									<p>{{education[0].school}}</p>
+								<div class="education">
+									<div class="col-md-2 no-padding textEdu">
+										<p>Education</p>
+									</div>
+									<div class="col-md-10 no-padding detailEdu" ng-mouseover="educationMouseOver()" ng-mouseleave="educationMouseLeave()">
+										<p>{{education[0].school}}</p>
+										<button type="button" id="educationEditButton" class="editButton" ng-click="scrollTo('education')"></button>
+									</div>
+									
 								</div>
 							</div>
 
-							<div class="follow-dropdown">
-								<div class="row">
-									<div class="dropdown pull-left connect-dropdown">
-										<button class="btn btn-primary dropdown-toggle btn-follow" type="button" data-toggle="dropdown">Follow
-											<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu">
-											<li><a href="#">View recent activity</a></li>
-											<li><a href="#">Sent Jeff InEmail</a></li>
-											<li><a href="#">Contact</a></li>
-										</ul>
-									</div>
-									<div class="connect pull-left">
-										<p>Know Jeff?</p>
-										<a href="#">Connect</a>
-									</div>
-									<div class="follower">
-										<strong>4,042,487</strong>
-										<p>followers</p>
-									</div>
+							<div class="view-follow">
+								<div class="col-md-10">
+									<button type="button" class="btn btn-primary btnView">View profile as</button>
+								</div>
+								<div class="follower col-md-2">
+									<strong>4,042,487</strong>
+									<p>followers</p>
 								</div>
 							</div>
 						</div>
@@ -101,15 +133,23 @@
 
 				<div class="background container-fluid">
 					<p class="bg-title">Background</p>
-					<div class="bg_summary">
+					<div class="bg_summary container-fluid">
 						<div class="bg_title">
 							<img src="./images/summary.png" width="30px" height="30px" class="pull-left">
 							<h3>Summary</h3>
-							<p ng-model="summary">{{summary}}</p>
+							<div class="summaryTextContainer container-fluid">
+								<p id="summaryText" class="col-md-10" ng-mouseover="summaryTextMouseOver()" ng-class = "{'summaryText-focus':summaryTextFocusing, 'summaryText':summaryTextLeft, 'hide':editting}" ng-mouseleave="summaryTextMouseLeave()" ng-click="edit('summary')">{{summary}}</p>
+								<textarea rows="10" id="summaryTextEdit" class="editSummary col-md-10" ng-Class="{'show': editting, 'hide':lostFocus}" >{{summary}}</textarea>
+								<button type="button col-md-2" id="editSummaryButton" class="editButton"></button>
+								<div class="confirmEdit">
+									<button class="btn btn-primary" ng-click="save('summary')" ng-class="{'btnSave': editting, 'hide':lostFocus}">Save</button>
+									<button class="btn" ng-class="{'btnCancel': editting, 'hide':lostFocus}" ng-click="cancelSummary()">Cancel</button>
+								</div>
+							</div>
 						</div>
 					</div>
 
-					<div class="bg_experience">
+					<div class="bg_experience" id="bg_experience">
 						<div class="bg_title">
 							<img src="./images/experience.png" width="30px" height="30px" class="pull-left">
 							<h3>Experience</h3>
@@ -117,8 +157,52 @@
 								<h4>{{ex.company}}</h4>
 								<p class="pos"><i>{{ex.position}}</i></p>
 								<p>{{ex.duration}}</p>
+								<button type="button" id="editExpButton{{$index}}" class="btn btn-primary" ng-click="editExp($index)">Edit</button>
+
+								<!--Edit/Add Modal-->
+								<div id="modalExperience" class="modal fade" role="dialog">
+									<div class="modal-dialog modal-sm">
+										<!-- Modal content-->
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal">&times</button>
+												<h4 class="modal-title">Edit experience</h4>
+											</div>
+											<div class="modal-body">
+												<div class="form-group">
+													<label>Company</label>
+													<input type="text" id="editCompany"></input>
+												</div>
+												<div class="form-group">
+													<label>Position</label>
+													<input type="text" id="editPosition"></input>
+												</div>
+												<div class="form-group">
+													<label>Duration</label>
+													<input type="text" id="editDuration"></input>
+												</div>
+												<div class="form-group">
+													<input type="checkbox" id="editCurrent">You are currently working here.</input>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="saveExperience()" data-target="#modalExperience">Save</button>
+												<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--end modal-->
+
+							</div>
+							<div class="container-fluid col-md-12">
+								<div class="col-md-4"></div>
+								<button class="btn col-md-4" id="addExperience" ng-click="addExperience()">+ Add experience</button>
+								<div class="col-md-4"></div>
 							</div>
 						</div>
+
+						
 					</div>
 
 					<div class="bg_project">
@@ -128,19 +212,87 @@
 							<div class="detail" ng-repeat="proj in project">
 								<h4>{{proj.name}}</h4>
 								<p>{{proj.detail}}</p>
+								<button type="button" id="editProjectButton{{$index}}" class="btn btn-primary" ng-click="editProject($index)">Edit</button>
+							</div>
+							<div class="container-fluid col-md-12">
+								<div class="col-md-4"></div>
+								<button class="btn col-md-4" id="addExperience" ng-click="addProject()">+ Add project</button>
+							<div class="col-md-4"></div>
+						</div>
+						</div>
+
+
+						<!--Edit/Add Modal-->
+						<div id="modalProject" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-md">
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times</button>
+										<h4 class="modal-title">Edit Projects</h4>
+									</div>
+									<div class="modal-body">
+										<div class="form-group" class="projectNameContainer">
+											<label class="col-md-2">Name</label>
+											<input class="col-md-10" type="text" id="editProjectName"></input>
+										</div>
+										<div class="form-group" class="projectDetailContainer">
+											<label class="col-md-2">Detail</label>
+											<input class="col-md-10" type="text" id="editProjectDetail"></input>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="saveProject()">Save</button>
+										<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+									</div>
+								</div>
 							</div>
 						</div>
+						<!--end modal-->
+
 					</div>
 
 					<div class="bg_skills">
 						<div class="bg_title">
 								<img src="./images/skill.png" width="30px" height="30px" class="pull-left">
 								<h3>Skills</h3>
-								<h4 class="detail" ng-repeat="sk in skills">{{sk.name}}</h4>
+								<div ng-repeat="sk in skills" class="detail container-fluid">
+									<h4 class="skill" id="skill{{$index}}">{{sk.name}}</h4>
+									<button type="button" id="deleteSkillButton{{$index}}" class="btn btn-danger deleteButton" ng-click="deleteSkill($index)">X</button>
+								</div>
+								<div class="container-fluid col-md-12">
+								<div class="col-md-4"></div>
+								<button class="btn col-md-4" id="addSkill" ng-click="newSkill()">+ Add skill</button>
+								<div class="col-md-4"></div>
 						</div>
+
+						<!--Edit/Add Modal-->
+						<div id="modalSkill" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-sm">
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times</button>
+										<h4 class="modal-title">Add Skills</h4>
+									</div>
+									<div class="modal-body">
+										<div class="form-group" class="projectNameContainer">
+											<label class="col-md-2">Skill</label>
+											<input class="col-md-10" type="text" id="editSkillName"></input>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addSkill()">Save</button>
+										<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--end modal-->
+
 					</div>
 
-					<div class="bg_education">
+					<div class="bg_education" id="bg_education">
 						<div class="bg_title">
 							<img src="./images/education.png" width="30px" height="30px" class="pull-left">
 							<h3>Education</h3>
@@ -149,7 +301,46 @@
 								<h4>{{edu.school}}</h4>
 								<p class="pos"><i>{{edu.certificate}}</i></p>
 								<p>{{edu.duration}}</p>
+								<button type="button" id="editSchoolButton{{$index}}" class="btn btn-primary" ng-click="editSchool($index)">Edit</button>
+						</div>
+						<div>
+							<div class="col-md-4"></div>
+							<button class="btn col-md-4" id="addSkill" ng-click="addSchool()">+ Add school</button>
+							<div class="col-md-4"></div>
+						</div>
+
+						<!--Edit/Add Modal-->
+						<div id="modalEducation" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-md">
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times</button>
+										<h4 class="modal-title">Edit Education</h4>
+									</div>
+									<div class="modal-body">
+										<div class="form-group" class="projectNameContainer">
+											<label class="col-md-2">School</label>
+											<input class="col-md-10" type="text" id="editSchool"></input>
+										</div>
+										<div class="form-group" class="projectNameContainer">
+											<label class="col-md-2">Certificate</label>
+											<input class="col-md-10" type="text" id="editCertificate"></input>
+										</div>
+										<div class="form-group" class="projectNameContainer">
+											<label class="col-md-2">Duration</label>
+											<input class="col-md-10" type="text" id="editSchoolDuration"></input>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="saveSchool()">Save</button>
+										<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+									</div>
+								</div>
 							</div>
+						</div>
+						<!--end modal-->
+
 					</div>
 				</div>
 			</div>

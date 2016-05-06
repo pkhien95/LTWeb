@@ -38,7 +38,71 @@ body
 
 .profile-image
 {
+	position: relative;
 	padding: 0px;
+	display: inline-block;
+}
+
+
+
+.profile-image .image
+{
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.profile-image .button
+{
+	position: absolute;
+	bottom:0px;
+    right:0px;
+    left: 0px;
+    width:100%;
+    height:30px;
+    padding-right: 10px;
+    background-color: rgba(0,0,0,0.7);
+    color: white;
+    opacity: 0;
+}
+
+#changePhotoInput
+{
+	display: none;
+}
+
+.profile-image:hover .button
+{
+	opacity: 1;
+}
+
+.name h1
+{
+	display: inline-block;
+}
+
+.editButton
+{
+	background: url(../images/edit.png);
+	background-size: contain;
+	width: 40px;
+	height: 40px;
+	display: none;
+	border: none;
+	margin-left: 10px;
+	background-color: #83cef2;
+}
+
+.editButton:hover
+{
+	
+	
+}
+
+.editButton-hover
+{
+	background-color: #83cef2;
+	opacity: 1;
 }
 
 .headline
@@ -46,9 +110,27 @@ body
 	color: #666667;
 }
 
+.headline h3
+{
+	display: inline-block;
+}
+
+.headline .editButton
+{
+	width: 20px;
+	height: 20px;
+}
+
 .location ul
 {
 	padding: 0px;
+	display: inline-block;
+}
+
+.location .editButton
+{
+	width: 15px;
+	height: 15px;
 }
 
 .location li
@@ -63,6 +145,54 @@ body
 	color:#666667;
 }
 
+.textCurrent 
+{
+	display: inline-block;
+}
+
+.detailCurrent
+{
+	display: inline-block;
+}
+
+.detailCurrent p
+{
+	display: inline-block;
+}
+
+.current .editButton
+{
+	width: 15px;
+	height: 15px;
+}
+
+.previous .textPrevious .detailPrevious
+{
+	display: inline-block;
+}
+
+.detailPrevious p
+{
+	display: inline-block;
+}
+
+.previous .editButton
+{
+	width: 15px;
+	height: 15px;
+}
+
+.detailEdu p
+{
+	display: inline-block;
+}
+
+.education .editButton
+{
+	width: 15px;
+	height: 15px;
+}
+
 .detail
 {
 	margin-top: 30px;
@@ -74,26 +204,12 @@ body
 	padding: 0;
 }
 
-.btn-follow
+.btnView
 {
-	
-}
-
-.connect p
-{
-	line-height: 8px;
-}
-
-.connect-dropdown
-{
-	margin-right: 20px;
-	margin-left: 20px;
 }
 
 .follower
 {
-	text-align: right;
-	padding-right: 30px;
 }
 
 .profile-link
@@ -130,6 +246,8 @@ body
 	margin-top: 150px;
 	padding: 0px;
 	margin-top: 20px;
+	padding-bottom: 10px;
+	margin-bottom: 100px;
 }
 
 .bg-title
@@ -153,12 +271,6 @@ body
 	margin-left: 10px;
 }
 
-.bg_title p
-{
-	padding-left: 20px;
-	padding-right: 20px;
-}
-
 .detail 
 {
 	padding-left: 20px;
@@ -167,4 +279,100 @@ body
 .pos
 {
 	color:gray;
+}
+
+.summaryTextContainer
+{
+	padding : 10px 50px 10px 50px;
+}
+
+.summaryText
+{
+	background-color: white;
+}
+
+.summaryText-focus
+{
+	background-color: #75cbff;
+	color: white;
+}
+
+.summaryTextContainer p
+{
+	display: inline-block;
+}
+
+.summaryTextContainer .editButton
+{
+	width: 20px;
+	height: 20px;
+	float: left;
+}
+
+.show
+{
+	display: inline-block;
+}
+
+.hide
+{
+	display: none;
+}
+
+.editSummary
+{
+	width: 100%;
+}
+
+.confirmEdit
+{
+	display: block;
+	clear: both;
+}
+
+.btnSave
+{
+	display: inline-block;
+}
+
+.btnCancel
+{
+	display: inline-block;
+}
+
+.editTextName
+{
+	display: none;
+	margin-top: 20px;
+	font-size: 30px;
+}
+
+.editTextHeadline
+{
+	display: none;
+	margin-top: 20px;
+	margin-bottom: 10px;
+	font-size: 24px;
+}
+
+.skill
+{
+	display: inline-block;
+}
+
+.deleteButton
+{
+	display: inline-block;
+	width: auto;
+	height: auto;
+}
+
+.projectNameContainer
+{
+	margin-bottom: 10px;
+}
+
+.projectDetailContainer
+{
+
 }
