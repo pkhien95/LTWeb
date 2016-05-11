@@ -5,6 +5,10 @@
 		<title>Linkedin</title>
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/style.css" rel="stylesheet">
+		<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+		<script src="js/angular.min.js"></script>
+		<script src="js/loadjson.js"></script>
+		<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 	</head>
 	<body>
 		<div class="container-fluid">
@@ -18,7 +22,30 @@
 						<div class="col-md-4 profile-image">
 							<img class="image" ng-src="{{avatar}}" alt="profile-image">
 							<button class="button" ng-click="editPhoto()">Change photo</button>
-							<input type="file" id="changePhotoInput" ng-model="avatar" file-model="avatar" ng-change="uploadPhoto()"></input>
+							<!-- <input type="file" id="changePhotoInput" data-bind-file="" data-ng-model="avatar"></input>
+ -->
+							<!--File Choose-->
+							<div id="modalFile" class="modal fade" role="dialog">
+										<div class="modal-dialog modal-sm">
+										<!-- Modal content-->
+											<div class="modal-content">
+											  <div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal">&times</button>
+													<h4 class="modal-title">Enter URL to your avatar</h4>
+											  </div>
+											  <div class="modal-body">
+											    <div class="form-group">
+											    	<label>URL</label>
+											    	<input type="text" value="{{avatar}}" id="editPhotoURL"></input>
+											    </div>
+											  </div>
+											  <div class="modal-footer">
+											  	<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="uploadPhoto()">Save</button>
+											    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+											  </div>
+											</div>
+										</div>
+									</div>
 						</div>
 
 						<div class="col-md-8">
@@ -158,6 +185,7 @@
 								<p class="pos"><i>{{ex.position}}</i></p>
 								<p>{{ex.duration}}</p>
 								<button type="button" id="editExpButton{{$index}}" class="btn btn-primary" ng-click="editExp($index)">Edit</button>
+								<button type="button" id="editExpButton{{$index}}" class="btn btn-danger" ng-click="deleteExp($index)">Delete</button>
 
 								<!--Edit/Add Modal-->
 								<div id="modalExperience" class="modal fade" role="dialog">
@@ -213,11 +241,13 @@
 								<h4>{{proj.name}}</h4>
 								<p>{{proj.detail}}</p>
 								<button type="button" id="editProjectButton{{$index}}" class="btn btn-primary" ng-click="editProject($index)">Edit</button>
+								<button type="button" id="deleteProject{{$index}}" class="btn btn-danger" ng-click="deleteProject($index)">Delete</button>
 							</div>
 							<div class="container-fluid col-md-12">
 								<div class="col-md-4"></div>
-								<button class="btn col-md-4" id="addExperience" ng-click="addProject()">+ Add project</button>
+								<button class="btn col-md-4" id="addProject" ng-click="addProject()">+ Add project</button>
 							<div class="col-md-4"></div>
+							
 						</div>
 						</div>
 
@@ -302,10 +332,11 @@
 								<p class="pos"><i>{{edu.certificate}}</i></p>
 								<p>{{edu.duration}}</p>
 								<button type="button" id="editSchoolButton{{$index}}" class="btn btn-primary" ng-click="editSchool($index)">Edit</button>
+								<button type="button" id="deleteEducationBtn{{$index}}" class="btn btn-danger" ng-click="deleteSchool($index)">Delete</button>
 						</div>
 						<div>
 							<div class="col-md-4"></div>
-							<button class="btn col-md-4" id="addSkill" ng-click="addSchool()">+ Add school</button>
+							<button class="btn col-md-4" id="addSchoolBtn" ng-click="addSchool()">+ Add school</button>
 							<div class="col-md-4"></div>
 						</div>
 
@@ -352,7 +383,6 @@
 	   	<!--Javascripts part-->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-		<script src="js/angular.min.js"></script>
-		<script src="js/loadjson.js"></script>
+		
 	</body>
 </html>
