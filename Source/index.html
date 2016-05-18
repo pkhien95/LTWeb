@@ -2,22 +2,237 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Linkedin</title>
+		<title>CVCreator</title>
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/style.css" rel="stylesheet">
 		<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 		<script src="js/angular.min.js"></script>
 		<script src="js/loadjson.js"></script>
 		<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/userauth.js"></script>
+		
 	</head>
 	<body>
+
+		<!--User login modal-->
+		<div id="modalLogin" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog modal-md">
+			<!-- Modal content-->
+				<div class="modal-content">
+
+				    <div class="modal-header">
+						<h4 class="modal-title">Log in to create your own CV</h4>
+				    </div>
+				    <div class="modal-body">
+				    	<form class="form-horizontal" role="form">
+						    <div class="form-group">
+						    	<label class="control-label col-sm-2" for="editLogEmail">Email</label>
+						    	<div class="col-sm-10">
+						    		<input type="email" class="form-control" value="" id="editLogEmail" placeholder="Enter email..."></input>
+						    	</div>
+						    </div>
+						    <div class="form-group">
+						    	<label class="control-label col-sm-2" for="editLogPassword">Password</label>
+						    	<div class="col-sm-10">
+						    		<input type="password" class="form-control" value="" id="editLogPassword" placeholder="Enter password..."></input>
+						    	</div>
+						    </div>
+						    <div class="checkbox">
+						    	<label>
+						    		<input type="checkbox" id="checkboxRemember">Remember me
+						    	</label>
+						    </div>
+						</form>
+				    </div>
+				    <div class="modal-footer">
+				    	<div class="resetPass">
+				    		<a href="#" data-dismiss="modal" id="resetPassword">Reset password</a>
+				    	</div>
+				    	<div class="loginButton">
+				    		<p id="loginError" class="inline-block noteError"></p>
+					  	    <button type="button" class="btn btn-primary inline-block" id="loginBtn">Log in</button>
+					        <button type="button" class="btn btn-default inline-block" id="registerBtn">Register</button>
+					    </div>
+				    </div>
+				    <div class="modal-footer">
+				    	 <div class="otherProvider">
+					    	<button type="button" class="btn" id="facebookLoginBtn"></button>
+					    	<button type="button" class="btn" id="googleLoginBtn"></button>
+					    </div>
+				    </div>
+				</div>
+			</div>
+		</div>
+		<!--End user login modal-->	
+
+
+		<!--Reset password modal-->
+		<div id="modalReset" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-md">
+			<!-- Modal content-->
+				<div class="modal-content">
+				    <div class="modal-header">
+						<h4 class="modal-title">Reset password</h4>
+				    </div>
+				    <div class="modal-body">
+				    	<form class="form-horizontal" role="form">
+						    <div class="form-group">
+						    	<label class="control-label col-sm-2" for="editResetEmail">Email</label>
+						    	<div class="col-sm-10">
+						    		<input type="email" class="form-control" value="" id="editResetEmail" placeholder="Enter your registered email..."></input>
+						    	</div>
+						    </div>
+						    <div class="form-group">
+						    	<p class="introReset"><i>New password will be sent to this email.</i></p>
+						    </div>
+						</form>
+				    </div>
+				    <div class="modal-footer">
+				    	<div class="resetPass">
+				    		<p id="resetResult" class="noteNormal"></p>
+				    	</div>
+				    	<div class="loginButton">
+					  	    <button type="button" class="btn btn-primary inline-block" id="getNewPassBtn">Get new password</button>
+					        <button type="button" class="btn btn-default inline-block" data-dismiss="modal" id="closeResetModalBtn">Close</button>
+					    </div>
+
+				    </div>
+				</div>
+			</div>
+		</div>
+		<!--End reset password modal-->
+
+
+		<!--Register modal-->
+		<div id="modalRegister" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-md">
+			<!-- Modal content-->
+				<div class="modal-content">
+				    <div class="modal-header">
+						<h4 class="modal-title">Register new account</h4>
+				    </div>
+				    <div class="modal-body">
+				    	<form class="form-horizontal" role="form">
+						    <div class="form-group">
+						    	<label class="control-label col-sm-4" for="editRegisEmail">Email</label>
+						    	<div class="col-sm-8">
+						    		<input type="email" class="form-control" value="" id="editRegisEmail" placeholder="Enter email..."></input>
+						    	</div>
+						    </div>
+
+						    <div class="form-group">
+						    	<label class="control-label col-sm-4" for="confirmRegisEmail">Confirm email</label>
+						    	<div class="col-sm-8">
+						    		<input type="email" class="form-control" value="" id="confirmRegisEmail" placeholder="Enter email..."></input>
+						    	</div>
+						    </div>
+
+						    <div class="form-group">
+						    	<label class="control-label col-sm-4" for="editRegisPassword">Password</label>
+						    	<div class="col-sm-8">
+						    		<input type="password" class="form-control" value="" id="editRegisPassword" placeholder="Enter password..."></input>
+						    	</div>
+						    </div>
+
+						    <div class="form-group">
+						    	<label class="control-label col-sm-4" for="confirmRegisPassword">Confirm password</label>
+						    	<div class="col-sm-8">
+						    		<input type="password" class="form-control" value="" id="confirmRegisPassword" placeholder="Enter password..."></input>
+						    	</div>
+						    </div>
+						</form>
+				    </div>
+				    <div class="modal-footer">
+				    	<div class="resetPass">
+				    		<p id="regisResult" class="noteSuccess"></p>
+				    	</div>
+				    	<div class="loginButton">
+					  	    <button type="button" class="btn btn-primary inline-block" id="submitAccBtn">Submit</button>
+					        <button type="button" class="btn btn-default inline-block" data-dismiss="modal" id="cancelRegisBtn">Cancel</button>
+					    </div>
+
+				    </div>
+				</div>
+			</div>
+		</div>
+		<!--End register modal-->
+
+		<div class="header container-fluid">
+			<div class="col-md-8"></div>
+			<div class="currentUser col-md-3">
+				<div class="dropdown dropdownUser">
+					<button id="username" class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">User name
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu">
+						<li><a id="changePassword" href="#">Change password</a></li>
+						<li><a id="logOut" href="#">Log out</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-1"></div>
+		</div>
+
+		<!--Change password modal-->
+		<div id="modalChangePassword" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-md">
+			<!-- Modal content-->
+				<div class="modal-content">
+				    <div class="modal-header">
+						<h4 class="modal-title">Change password</h4>
+				    </div>
+				    <div class="modal-body">
+				    	<form class="form-horizontal" role="form">
+						    <div class="form-group">
+						    	<label class="control-label col-sm-4" for="currentUserEmail">Email</label>
+						    	<div class="col-sm-8">
+						    		<input type="email" class="form-control" id="currentUserEmail" readonly="true"></input>
+						    	</div>
+						    </div>
+						    <div class="form-group">
+						    	<label class="control-label col-sm-4" for="editOldPassword">Old password</label>
+						    	<div class="col-sm-8">
+						    		<input type="password" class="form-control" value="" id="editOldPassword" placeholder="Enter password..."></input>
+						    	</div>
+						    </div>
+
+						    <div class="form-group">
+						    	<label class="control-label col-sm-4" for="editNewPassword">New password</label>
+						    	<div class="col-sm-8">
+						    		<input type="password" class="form-control" value="" id="editNewPassword" placeholder="Enter password..."></input>
+						    	</div>
+						    </div>
+
+						    <div class="form-group">
+						    	<label class="control-label col-sm-4" for="confirmNewPassword">Confirm new password</label>
+						    	<div class="col-sm-8">
+						    		<input type="password" class="form-control" value="" id="confirmNewPassword" placeholder="Enter password..."></input>
+						    	</div>
+						    </div>
+						</form>
+				    </div>
+				    <div class="modal-footer">
+				    	<div class="resetPass">
+				    		<p id="changePasswordResult" class="noteNormal"></p>
+				    	</div>
+				    	<div class="loginButton">
+					  	    <button type="button" class="btn btn-primary inline-block" id="saveNewPassword">Save</button>
+					        <button type="button" class="btn btn-default inline-block" data-dismiss="modal" id="closeChangePassword">Close</button>
+					    </div>
+
+				    </div>
+				</div>
+			</div>
+		</div>
+		<!--End change password modal-->
+
 		<div class="container-fluid">
 			<!--Gap left-->
 			<div class="col-md-1"></div>
 
 			<!--Main page-->
 			<div id="page" class="container-fluid col-md-10" ng-app="linkedin" ng-controller="userProfile as up">
-				<div class="summary container-fluid">
+				<div class="summary container-fluid" id="summaryInfo">
 					<div class="profile-card-top container-fluid">
 						<div class="col-md-4 profile-image">
 							<img class="image" ng-src="{{avatar}}" alt="profile-image">
@@ -26,26 +241,26 @@
  -->
 							<!--File Choose-->
 							<div id="modalFile" class="modal fade" role="dialog">
-										<div class="modal-dialog modal-sm">
-										<!-- Modal content-->
-											<div class="modal-content">
-											  <div class="modal-header">
-													<button type="button" class="close" data-dismiss="modal">&times</button>
-													<h4 class="modal-title">Enter URL to your avatar</h4>
-											  </div>
-											  <div class="modal-body">
-											    <div class="form-group">
-											    	<label>URL</label>
-											    	<input type="text" value="{{avatar}}" id="editPhotoURL"></input>
-											    </div>
-											  </div>
-											  <div class="modal-footer">
-											  	<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="uploadPhoto()">Save</button>
-											    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-											  </div>
-											</div>
-										</div>
+								<div class="modal-dialog modal-sm">
+								<!-- Modal content-->
+									<div class="modal-content">
+									  <div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times</button>
+											<h4 class="modal-title">Enter URL to your avatar</h4>
+									  </div>
+									  <div class="modal-body">
+									    <div class="form-group">
+									    	<label>URL</label>
+									    	<input type="text" value="{{avatar}}" id="editPhotoURL"></input>
+									    </div>
+									  </div>
+									  <div class="modal-footer">
+									  	<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="uploadPhoto()">Save</button>
+									    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+									  </div>
 									</div>
+								</div>
+							</div>
 						</div>
 
 						<div class="col-md-8">
@@ -158,7 +373,7 @@
 					</div>
 				</div>
 
-				<div class="background container-fluid">
+				<div class="background container-fluid" id="backgroundInfo">
 					<p class="bg-title">Background</p>
 					<div class="bg_summary container-fluid">
 						<div class="bg_title">
@@ -381,7 +596,7 @@
 			</div>
 		</div>	
 	   	<!--Javascripts part-->
-		<script src="js/jquery.min.js"></script>
+
 		<script src="js/bootstrap.min.js"></script>
 		
 	</body>

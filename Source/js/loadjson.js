@@ -21,7 +21,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 		$scope.education = "";
 		$scope.index = 0;
 		
-		var ref = new Firebase('https://cvmanager.firebaseio.com/profile');
+		var ref = new Firebase('https://cvcreator.firebaseio.com/profile');
 		var data = $firebaseArray(ref);
 		// $scope.name = $scope.data.$getRecord('name');
 		data.$loaded().then(function(tasks) 
@@ -325,6 +325,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					"duration" : $("#editDuration").val(),
 				};
 				$scope.experience.push(temp);
+				updateExp();
 				console.log("added")
 				return;
 			}
@@ -454,7 +455,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			$("#editSchool").val("");
 			$("#editCertificate").val("");
 			$("#editSchoolDuration").val("");
-			$("#modalEducation").modal('show');
+			$("#modalEducation").modal('toggle');
 			$scope.index = -1;
 		}
 

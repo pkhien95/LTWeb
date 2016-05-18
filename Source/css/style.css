@@ -376,3 +376,72 @@ body
 {
 
 }
+
+.inline-block
+{
+	display: inline-block;
+}
+
+.resetPass
+{
+	float: left;
+	line-height: 34px;
+}
+
+.loginButton
+{
+	float: right;
+	line-height: 34px;
+}
+
+.introReset
+{
+	margin-left: 45px;
+}
+
+.noteNormal
+{
+	color: black;
+}
+
+.noteSuccess
+{
+	color: #0066d8;
+}
+
+.noteError
+{
+	color: red;
+}
+
+.currentUser
+{
+	float:right;
+	margin-top: 10px;
+}
+
+#facebookLoginBtn
+{
+	background: url(../images/facebook_login.png) no-repeat top left;
+	background-size: 100%;
+	width: 200px;
+	height: 50px;
+}
+
+#googleLoginBtn
+{
+	background: url(../images/google_login.png) no-repeat top left;
+	background-size: 100%;
+	width: 200px;
+	height: 50px;
+}
+
+.otherProvider
+{
+	float: left;
+}
+
+.dropdownUser
+{
+	float: right;
+}
