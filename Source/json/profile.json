@@ -46,5 +46,88 @@
 			"certificate": "Bachelor of Science, Economics",
 			"duration": "1988 - June 1992"
 		}]
+	}, {
+		"id": "1",
+		"name": "Bill Gates",
+		"avatar": "images/profile_image.jpg",
+		"address": "Greater Seattle Area",
+		"industry": "Philanthropy",
+		"summary": "Co-chair of the Bill & Melinda Gates Foundation. Chairman, Microsoft Corporation. Voracious reader. Avid traveler. Active blogger.",
+		"experience": [{
+			"company": "Microsoft",
+			"position": "Co-founder",
+			"duration": "1975 - Present (41 years)",
+			"current": "true"
+		}, {
+			"company": "Bill & Melinda Gates Foundation",
+			"position": "Co-chair",
+			"duration": "2000 - Present (16 years)",
+			"current": "true"
+		}],
+		"project": [{
+			"name": "More Momentum for Clean Energy",
+			"detail": "In the United States, we are making progress on two fronts. One has to do with the federal budget. This year the funding for key research programs at the Department of Energy went up by nearly $300 million—the first significant increase in almost four decades. We are on a path to another increase next year too. That is great to see, because more research will ultimately lead to more clean-energy solutions reaching the market."
+		}, {
+			"name": "5 Books to Read This Summer",
+			"detail": "Here in Seattle, summer is a gift you earn by gutting out nine months of rain and gloom. The skies are clear, there’s hardly any humidity, and the nights are cool. Best of all, you sometimes get the chance to sit outside reading a great book."
+		}, {
+			"name": "To Close the Gender Gap, We Have to Close the Data Gap",
+			"detail": "Melinda recently announced that we are investing $80 million to collect better data on women and girls."
+		}],
+		"skills": [{
+			"name": "Business Strategy"
+		}, {
+			"name": "Leadership"
+		}, {
+			"name": "Strategy"
+		}, {
+			"name": "Entrepreneurship"
+		}],
+		"education": [{
+			"school": "Harvard University",
+			"certificate": "Bachelor of Science, Economics",
+			"duration": "1973 - 1975"
+		}]
+	}, {
+		"id": "2",
+		"name": "Ban Ki-moon",
+		"avatar": "images/profile_image.jpg",
+		"address": "United Nations",
+		"industry": "International Affairs",
+		"summary": "Ban Ki-moon is the eighth Secretary-General of the United Nations. His priorities have been to mobilize world leaders around a set of new global challenges, from climate change and economic upheaval to pandemics and increasing pressures involving food, energy and water. He has sought to be a bridge-builder, to give voice to the world’s poorest and most vulnerable people, and to strengthen the Organization itself. The Secretary-General has said, and saw the United Nations help my country to recover and rebuild. That experience was a big part of what led me to pursue a career in public service. As Secretary-General, I am determined to see this Organization deliver tangible, meaningful results that advance peace, development and human rights. Mr. Ban took office on 1 January 2007. On 21 June 2011, he was unanimously re-elected by the General Assembly and will continue to serve until 31 December 2016.",
+		"experience": [{
+			"company": "United Nations",
+			"position": "Secretary General",
+			"duration": "2007 - Present (9 years 6 months)",
+			"current": "true"
+		}],
+		"project": [{
+			"name": "This is the worst humanitarian crisis since World War II -- and here's what we can do about it",
+			"detail": "Around the world, more than 125 million people need humanitarian assistance, yet we are seeing the largest shortfall in the funding needed to help in decades. The Istanbul Summit aims to bring about a sustainable framework to provide assistance to these women, men and children, including nearly five million refugees from Syria."
+		}, {
+			"name": "Why countries should sign the Paris Agreement on climate change -- and why you should care",
+			"detail": "In an overwhelming display of determination to address climate change, representatives of more than 165 countries will take part in the signing ceremony, breaking the record for the number of signatories on the opening day of any international treaty. The previous record was 119, set in 1982."
+		}, {
+			"name": "Why accepting migrants and refugees can be a win for everyone",
+			"detail": "Think about the decisions you have taken today -- what to wear, what to eat, what to read on your news feed.  Many of the daily choices that you make are so routine that you probably barely notice."
+		}],
+		"skills": [{
+			"name": "Business Strategy"
+		}, {
+			"name": "Leadership"
+		}, {
+			"name": "Strategy"
+		}, {
+			"name": "Entrepreneurship"
+		}],
+		"education": [{
+			"school": "Harvard University",
+			"certificate": "Master's degree, Public Administration",
+			"duration": "1985"
+		}, {
+			"school": "Seoul National University",
+			"certificate": "Bachelor's degree, International Relations and Affairs",
+			"duration": "1970"
+		}]
 	}]
 }
