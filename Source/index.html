@@ -380,12 +380,17 @@
 							<img src="./images/summary.png" width="30px" height="30px" class="pull-left">
 							<h3>Summary</h3>
 							<div class="summaryTextContainer container-fluid">
-								<p id="summaryText" class="col-md-10" ng-mouseover="summaryTextMouseOver()" ng-class = "{'summaryText-focus':summaryTextFocusing, 'summaryText':summaryTextLeft, 'hide':editting}" ng-mouseleave="summaryTextMouseLeave()" ng-click="edit('summary')">{{summary}}</p>
-								<textarea rows="10" id="summaryTextEdit" class="editSummary col-md-10" ng-Class="{'show': editting, 'hide':lostFocus}" >{{summary}}</textarea>
+								
+									<p id="summaryText" class="slide-show col-md-10" ng-mouseover="summaryTextMouseOver()" ng-class = "{'summaryText-focus':summaryTextFocusing, 'summaryText':summaryTextLeft}" ng-mouseleave="summaryTextMouseLeave()" ng-click="edit('summary')">{{summary}}</p>
+								
 								<button type="button col-md-2" id="editSummaryButton" class="editButton"></button>
-								<div class="confirmEdit">
-									<button class="btn btn-primary" ng-click="save('summary')" ng-class="{'btnSave': editting, 'hide':lostFocus}">Save</button>
-									<button class="btn" ng-class="{'btnCancel': editting, 'hide':lostFocus}" ng-click="cancelSummary()">Cancel</button>
+								<div id="summaryTextEditContainer" class="slide-down container-fluid">
+									<textarea id="summaryTextEdit" class="hide col-md-10" rows="10" ng-class="{'show':editting}">{{summary}}</textarea>
+
+									<div class="confirmEdit">
+										<button class="btn btn-primary" ng-click="save('summary')" ng-class="{'btnSave': editting, 'hide':lostFocus}">Save</button>
+										<button class="btn" ng-class="{'btnCancel': editting, 'hide':lostFocus}" ng-click="cancelSummary()">Cancel</button>
+									</div>
 								</div>
 							</div>
 						</div>
