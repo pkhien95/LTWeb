@@ -146,6 +146,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 
 		$scope.edit = function(element)
 		{
+			var index = findProfile(data, userID);
 			switch(element)
 			{
 				case "summary":
@@ -164,6 +165,9 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 
 		$scope.save = function(element)
 		{
+			var index = findProfile(data, userID);
+			var useref = ref.child("profile");
+			var hopperef = useref.child("id");
 			switch(element)
 			{
 				case "summary":
@@ -173,6 +177,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					$scope.lostFocus = true;
 					$scope.summary = document.getElementById("summaryTextEdit").value;
 					document.getElementById("summaryText").innerHTML = $scope.summary;
+					hopperef.update({"summary":"$scope.summary"});
 					$("#editSummaryButton").hide();
 					$("#summaryText").show();
 					$("#summaryTextEditContainer").removeClass("slide-show");
