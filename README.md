@@ -1,1 +1,1 @@
-Google analytics
+add script of Google analytics
