@@ -177,7 +177,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					$scope.lostFocus = true;
 					$scope.summary = document.getElementById("summaryTextEdit").value;
 					document.getElementById("summaryText").innerHTML = $scope.summary;
-					hopperef.update({"summary":"$scope.summary"});
+					hopperef.update({"summary":"abc"});
 					$("#editSummaryButton").hide();
 					$("#summaryText").show();
 					$("#summaryTextEditContainer").removeClass("slide-show");
