@@ -1,1 +1,1 @@
-thêm file script cua Google analytics
+add script of Google analytics
