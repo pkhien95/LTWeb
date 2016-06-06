@@ -20,41 +20,59 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 		$scope.skills = "";
 		$scope.education = "";
 		$scope.index = 0;
-		
+		var newUser = true;
 		var ref = new Firebase('https://cvcreator.firebaseio.com/profile');
-		
+		var data = $firebaseArray(ref);
 		ref.onAuth(authDataCallback);
 		var userID;
+		var userIndex;
 		//Get current user 
 		function authDataCallback(authData) 
 		{
 			if (authData) 
 			{
 				userID = authData.uid;
-
+	
 				//Start loading user profile.
-				var data = $firebaseArray(ref);
-				data.$loaded().then(function(tasks) 
+				
+				data.$loaded().then(function(tasks)
 				{
 					console.log("Number of users: " + data.length);
-					var index = findProfile(data, userID);	//Find current auth user and load his/her profile.
-					console.log("User index: " + index);
-					if(index == -1)	//This is a new user
+					userIndex = findProfile(data, userID);	//Find current auth user and load his/her profile.
+					console.log("User userIndex: " + userIndex);
+					if(userIndex == -1)	//This is a new user
 					{
 						$scope.name = "Unidentifed";
-
+						//$scope.summary = "Unidentifed";
+						newUser = true;
+						data.$add({
+							"id": userID,
+							name: "",
+							"avatar": "",
+							"address": "",
+							"industry": "",
+							"summary": "",
+							"experience": "",
+							"project": "",
+							"skills": "",
+							"education": ""
+						});
 					}
 					else //This user has a profile
 					{
-						$scope.name = data[index].name;
-						$scope.avatar = data[index].avatar;
-						$scope.address = data[index].address;
-						$scope.industry = data[index].industry;
-						$scope.summary = data[index].summary;
-						$scope.experience = data[index].experience;
-						$scope.project = data[index].project;
-						$scope.skills = data[index].skills;
-						$scope.education = data[index].education;
+						console.log(userIndex);
+						$scope.name = data[userIndex].name;
+						$scope.avatar = data[userIndex].avatar;
+						$scope.address = data[userIndex].address;
+						$scope.industry = data[userIndex].industry;
+						//if (data[userIndex].summary == null)
+							//data[userIndex].summary = "Add summary";
+						$scope.summary = data[userIndex].summary;
+						$scope.experience = data[userIndex].experience;
+						$scope.project = data[userIndex].project;
+						$scope.skills = data[userIndex].skills;
+						$scope.education = data[userIndex].education;
+						newUser = false;
 					}
 					updateExp();
 				});
@@ -112,7 +130,19 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 		{
 			console.log("Uploading Photo");
 			$scope.avatar = $("#editPhotoURL").val();
-
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.avatar = $scope.avatar;
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.avatar = $scope.avatar;
+				data.$save(user);
+			}
 			console.log($("#editPhotoURL").val());
 		}
 
@@ -146,7 +176,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 
 		$scope.edit = function(element)
 		{
-			var index = findProfile(data, userID);
+			//var index = findProfile(data, userID);
 			switch(element)
 			{
 				case "summary":
@@ -154,6 +184,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					$scope.summaryTextFocusing = false;
 					$scope.summaryTextLeft = false;
 					$scope.lostFocus = false;
+					//$scope.summary = "Add summary";
 					$scope.summary = document.getElementById("summaryTextEdit").innerHTML;
 					$("#editSummaryButton").hide();
 					$("#summaryText").hide();
@@ -165,9 +196,9 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 
 		$scope.save = function(element)
 		{
-			var index = findProfile(data, userID);
-			var useref = ref.child("profile");
-			var hopperef = useref.child("id");
+			//var index = findProfile(data, userID);
+			//var useref = ref.child("profile");
+			//var hopperef = useref.child("id");
 			switch(element)
 			{
 				case "summary":
@@ -177,7 +208,20 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					$scope.lostFocus = true;
 					$scope.summary = document.getElementById("summaryTextEdit").value;
 					document.getElementById("summaryText").innerHTML = $scope.summary;
-					hopperef.update({"summary":"abc"});
+					//hopperef.update({"summary":$scope.summary});
+					if(newUser)
+					{
+						var user = data[data.length - 1];
+						user.summary = $scope.summary;
+						data.$save(user);
+						console.log("Saved new name");
+					}
+					else
+					{
+						var user = data[userIndex];
+						user.summary = $scope.summary;
+						data.$save(user);
+					}
 					$("#editSummaryButton").hide();
 					$("#summaryText").show();
 					$("#summaryTextEditContainer").removeClass("slide-show");
@@ -221,6 +265,19 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 
 			$("#editTextName").hide();
 			$("#textName").show();
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.name = $scope.name;
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.name = $scope.name;
+				data.$save(user);
+			}
 		}
 
 		$scope.scrollTo = function(element)
@@ -258,6 +315,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			$("#editTextHeadline").show();
 			$("#textHeadline").hide();
 			$("#editHeadlineButton").hide();
+			
 		}
 
 		$scope.completeEditTextHeadline = function()
@@ -266,6 +324,20 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			console.log($("#editTextHeadline").val());
 			$("#editTextHeadline").hide();
 			$("#textHeadline").show();
+			/*if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.headline = $scope.name;
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.name = $scope.name;
+				data.$save(user);
+			}*/
+			
 		}
 
 		$scope.locationMouseOver = function()
@@ -283,8 +355,27 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 		{
 			$scope.address = $("#editAddress").val();
 			$scope.industry = $("#editIndustry").val();
-			("#textAdress").val($scope.address);
-			("#textIndustry").val($scope.industry);
+			$("#textAdress").val($scope.address);
+			$("#textIndustry").val($scope.industry);
+			$("#editAddress").hide();
+			$("#textAdress").show();
+			$("#editIndustry").hide();
+			$("#textIndustry").show();
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.address = $scope.address;
+				user.industry = $scope.industry;
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.address = $scope.address;
+				user.industry = $scope.industry;
+				data.$save(user);
+			}
 		}
 
 		$scope.currentMouseOver = function()
@@ -331,15 +422,49 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			else
 				$("#editCurrent").prop('checked', false);
 			$("#modalExperience").modal('show');
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.experience[index].company = $scope.experience[index].company;
+				user.experience[index].position = $scope.experience[index].position;
+				user.experience[index].duration = $scope.experience[index].duration;
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.experience[index].company = $scope.experience[index].company;
+				user.experience[index].position = $scope.experience[index].position;
+				user.experience[index].duration = $scope.experience[index].duration;
+				data.$save(user);
+			}
 			$scope.index = index;
 			console.log($scope.index);
+			
+			
 		}
 
 		$scope.deleteExp = function(index)
 		{
 			$scope.experience.splice(index, 1);
 			console.log($scope.experience);
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.experience.splice(index, 1);
+				data.$save(user);
+				$scope.experience = data[data.length - 1].experience;
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.experience.splice(index, 1);
+				data.$save(user);
+				$scope.experience = data[userIndex].experience;
+			}
 			updateExp();
+			
 		}
 
 		$scope.saveExperience = function()
@@ -363,7 +488,22 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					"position" : $("#editPosition").val(),
 					"duration" : $("#editDuration").val(),
 				};
-				$scope.experience.push(temp);
+				// $scope.experience.push(temp);
+				if(newUser)
+				{
+					var user = data[data.length - 1];
+					user.experience = [];
+					user.experience.push(temp);
+					data.$save(user);
+					$scope.experience = data[data.length - 1].experience;
+				}
+				else
+				{
+					var user = data[userIndex];
+					user.experience.push(temp);
+					data.$save(user);
+					$scope.experience = data[userIndex].experience;
+				}
 				updateExp();
 				console.log("added")
 				return;
@@ -379,6 +519,24 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			//update
 			updateExp();
 			console.log($scope.current);
+			
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.experience[$scope.index].company = $scope.experience[$scope.index].company;
+				user.experience[$scope.index].position = $scope.experience[$scope.index].position;
+				user.experience[$scope.index].duration = $scope.experience[$scope.index].duration;
+				
+				data.$save(user);
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.experience[$scope.index].company = $scope.experience[$scope.index].company;
+				user.experience[$scope.index].position = $scope.experience[$scope.index].position;
+				user.experience[$scope.index].duration = $scope.experience[$scope.index].duration;
+				data.$save(user);
+			}
 		}
 
 		$scope.addExperience = function()
@@ -387,7 +545,10 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			$("#editPosition").val("");
 			$("#editDuration").val("");
 			$("#modalExperience").modal('show');
+			
 			$scope.index = -1;
+			
+			
 		}
 
 		$scope.editProject = function(index)
@@ -396,6 +557,22 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			$("#editProjectDetail").val($scope.project[index].detail);
 			$("#modalProject").modal('show');
 			$scope.index = index;
+			//if(newUser)
+			//{
+				//var user = data[data.length - 1];
+				//user.project[index].name = $scope.project[index].name;
+				//user.project[index].detail = $scope.project[index].detail;
+				
+				//data.$save(user);
+				//console.log("Saved new name");
+			//}
+			//else
+			//{
+				//var user = data[userIndex];
+				//user.project[index].name = $scope.project[index].name;
+				//user.project[index].detail = $scope.project[index].detail;
+				//data.$save(user);
+			//}
 		}
 
 		$scope.deleteProject = function(index)
@@ -419,6 +596,22 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			$scope.project[$scope.index].name = $("#editProjectName").val();
 			$scope.project[$scope.index].detail = $("#editProjectDetail").val();
 			$("#modalProject").modal('hide');
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.project[index].name = $scope.project[$scope.index].name;
+				user.project[index].detail = $scope.project[$scope.index].detail;
+				
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.project[index].name = $scope.project[$scope.index].name;
+				user.project[index].detail = $scope.project[$scope.index].detail;
+				data.$save(user);
+			}
 		}
 
 		$scope.addProject = function()
@@ -426,7 +619,24 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			$("#editProjectName").val("");
 			$("#editProjectDetail").val("");
 			$("#modalProject").modal('show');
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.project[index].name = $scope.project[$scope.index].name;
+				user.project[index].detail = $scope.project[$scope.index].detail;
+				
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.project[index].name = $scope.project[$scope.index].name;
+				user.project[index].detail = $scope.project[$scope.index].detail;
+				data.$save(user);
+			}
 			$scope.index = -1;
+			
 		}
 
 		$scope.deleteSkill = function(index)
@@ -449,6 +659,21 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					"name" : $("#editSkillName").val()
 				};
 			$scope.skills.push(temp);
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.skills[index].name = $scope.skills[index].name;
+			
+				
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.skills[index].name = $scope.skills[index].name;
+				data.$save(user);
+			}
 		}
 
 		$scope.editSchool= function(index)
@@ -459,11 +684,45 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			$("#modalEducation").modal('show');
 			console.log($scope.current);
 			$scope.index = index;
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.education[index].school = $scope.education[index].school;
+				user.education[index].certificate = $scope.education[index].certificate;
+				user.education[index].duration = $scope.education[index].duration;
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.education[index].school = $scope.education[index].school;
+				user.education[index].certificate = $scope.education[index].certificate;
+				user.education[index].duration = $scope.education[index].duration;
+				data.$save(user);
+			}
 		}
 
 		$scope.deleteSchool = function(index)
 		{
 			$scope.education.splice(index, 1);
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.education[index].school = $scope.education[index].school;
+				user.education[index].certificate = $scope.education[index].certificate;
+				user.education[index].duration = $scope.education[index].duration;
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.education[index].school = $scope.education[index].school;
+				user.education[index].certificate = $scope.education[index].certificate;
+				user.education[index].duration = $scope.education[index].duration;
+				data.$save(user);
+			}
 		}
 
 		$scope.saveSchool = function()
@@ -478,7 +737,23 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					"duration" : $("#editSchoolDuration").val(),
 				};
 				$scope.education.push(temp);
-				
+				if(newUser)
+				{
+					var user = data[data.length - 1];
+					user.education[index].school = $scope.education[index].school;
+					user.education[index].certificate = $scope.education[index].certificate;
+					user.education[index].duration = $scope.education[index].duration;
+					data.$save(user);
+					console.log("Saved new name");
+				}
+				else
+				{
+					var user = data[userIndex];
+					user.education[index].school = $scope.education[index].school;
+					user.education[index].certificate = $scope.education[index].certificate;
+					user.education[index].duration = $scope.education[index].duration;
+					data.$save(user);
+				}
 			}
 			else
 			{
@@ -486,6 +761,23 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 				$scope.education[$scope.index].certificate = $("#editCertificate").val();
 				$scope.education[$scope.index].duration = $("#editSchoolDuration").val();
 				$("#modalEducation").modal('hide');
+				if(newUser)
+				{
+					var user = data[data.length - 1];
+					user.education[index].school = $scope.education[index].school;
+					user.education[index].certificate = $scope.education[index].certificate;
+					user.education[index].duration = $scope.education[index].duration;
+					data.$save(user);
+					console.log("Saved new name");
+				}
+				else
+				{
+					var user = data[userIndex];
+					user.education[index].school = $scope.education[index].school;
+					user.education[index].certificate = $scope.education[index].certificate;
+					user.education[index].duration = $scope.education[index].duration;
+					data.$save(user);
+				}
 			}
 		}
 
@@ -495,6 +787,23 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			$("#editCertificate").val("");
 			$("#editSchoolDuration").val("");
 			$("#modalEducation").modal('toggle');
+			if(newUser)
+			{
+				var user = data[data.length - 1];
+				user.education[index].school = $scope.education[index].school;
+				user.education[index].certificate = $scope.education[index].certificate;
+				user.education[index].duration = $scope.education[index].duration;
+				data.$save(user);
+				console.log("Saved new name");
+			}
+			else
+			{
+				var user = data[userIndex];
+				user.education[index].school = $scope.education[index].school;
+				user.education[index].certificate = $scope.education[index].certificate;
+				user.education[index].duration = $scope.education[index].duration;
+				data.$save(user);
+			}
 			$scope.index = -1;
 		}
 
