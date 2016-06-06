@@ -13,7 +13,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 		$scope.address = "";
 		$scope.industry = "";
 		$scope.summary = "";
-		$scope.experience = "";
+		$scope.experience = [];
 		$scope.current = [];
 		$scope.previous = [];
 		$scope.project = "";
@@ -22,34 +22,51 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 		$scope.index = 0;
 		
 		var ref = new Firebase('https://cvcreator.firebaseio.com/profile');
-		var data = $firebaseArray(ref);
-		// $scope.name = $scope.data.$getRecord('name');
-		data.$loaded().then(function(tasks) 
+		
+		ref.onAuth(authDataCallback);
+		var userID;
+		//Get current user 
+		function authDataCallback(authData) 
 		{
-			$scope.name = data[0].name;
-			$scope.avatar = data[0].avatar;
-			$scope.address = data[0].address;
-			$scope.industry = data[0].industry;
-			$scope.summary = data[0].summary;
-			$scope.experience = data[0].experience;
-			$scope.project = data[0].project;
-			$scope.skills = data[0].skills;
-			$scope.education = data[0].education;
+			if (authData) 
+			{
+				userID = authData.uid;
 
+				//Start loading user profile.
+				var data = $firebaseArray(ref);
+				data.$loaded().then(function(tasks) 
+				{
+					console.log("Number of users: " + data.length);
+					var index = findProfile(data, userID);	//Find current auth user and load his/her profile.
+					console.log("User index: " + index);
+					if(index == -1)	//This is a new user
+					{
+						$scope.name = "Unidentifed";
 
-			// for(var i = 0; i < $scope.experience.length; i++)
-			// {
-			// 	if($scope.experience[i].current == "true" || $scope.experience[i].current == true)
-			// 	{
-			// 		$scope.current.push($scope.experience[i]);
-			// 	}
-			// 	else
-			// 	{
-			// 		$scope.previous.push($scope.experience[i]);
-			// 	}
-			// }
-			updateExp();
-		});
+					}
+					else //This user has a profile
+					{
+						$scope.name = data[index].name;
+						$scope.avatar = data[index].avatar;
+						$scope.address = data[index].address;
+						$scope.industry = data[index].industry;
+						$scope.summary = data[index].summary;
+						$scope.experience = data[index].experience;
+						$scope.project = data[index].project;
+						$scope.skills = data[index].skills;
+						$scope.education = data[index].education;
+					}
+					updateExp();
+				});
+
+			}
+			else
+			{
+				console.log("User is logged out");
+			}
+		}
+
+		
 
 		function updateExp()
 		{
@@ -66,6 +83,18 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					$scope.previous.push($scope.experience[i]);
 				}
 			}
+		}
+
+		function findProfile(data, userID)
+		{
+			for(var i = 0; i < data.length; i++)
+			{
+				if(data[i].id == userID)
+				{
+					return i;
+				}
+			}
+			return -1;
 		}
 
 		$scope.editPhoto = function()
@@ -125,8 +154,11 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					$scope.summaryTextLeft = false;
 					$scope.lostFocus = false;
 					$scope.summary = document.getElementById("summaryTextEdit").innerHTML;
-					
+					$("#editSummaryButton").hide();
+					$("#summaryText").hide();
+					$("#summaryTextEditContainer").addClass("slide-show");
 					break;
+
 			}
 		}
 
@@ -142,6 +174,8 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					$scope.summary = document.getElementById("summaryTextEdit").value;
 					document.getElementById("summaryText").innerHTML = $scope.summary;
 					$("#editSummaryButton").hide();
+					$("#summaryText").show();
+					$("#summaryTextEditContainer").removeClass("slide-show");
 					break;
 			}
 		}

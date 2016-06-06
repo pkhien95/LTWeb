@@ -284,6 +284,13 @@ body
 .summaryTextContainer
 {
 	padding : 10px 50px 10px 50px;
+	overflow: hidden;
+}
+
+.slideContainer
+{
+	overflow: hidden;
+	display: block;
 }
 
 .summaryText
@@ -319,9 +326,32 @@ body
 	display: none;
 }
 
-.editSummary
+.slide-down
 {
-	width: 100%;
+	transform: translateY(150%);
+	transition: .5s cubic-bezier(0, 1, 0.5, 1);
+}
+
+.specSlide-show
+{
+	transform: translateY(-40%);
+	transition: .5s cubic-bezier(0, 1, 0.5, 1);
+}
+
+.slide-show
+{
+	transform: translateY(0);
+	transition: 0.5s cubic-bezier(0, 1, 0.5, 1);
+}
+.slide-up
+{
+	transform: translateY(-150%);
+}
+
+
+#summaryTextEdit
+{
+	float: left;
 }
 
 .confirmEdit
