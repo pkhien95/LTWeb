@@ -516,6 +516,10 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 				else
 				{
 					var user = data[userIndex];
+					if(user.experience == "")
+					{
+						user.experience = [];
+					}
 					user.experience.push(temp);
 					data.$save(user);
 					$scope.experience = data[userIndex].experience;
@@ -690,6 +694,10 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 				else
 				{
 					var user = data[userIndex];
+					if(user.project == "")
+					{
+						user.project = [];
+					}
 					user.project.push(temp);
 					data.$save(user);
 					$scope.project = data[userIndex].project;
@@ -780,6 +788,10 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 				else
 				{
 					var user = data[userIndex];
+					if(user.skills == "")
+					{
+						user.skills = [];
+					}
 					user.skills.push(temp);
 					data.$save(user);
 					$scope.skills = data[userIndex].skills;
@@ -887,6 +899,10 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 				else
 				{
 					var user = data[userIndex];
+					if(user.education == "")
+					{
+						user.education = [];
+					}
 					user.education.push(temp);
 					data.$save(user);
 					$scope.education = data[userIndex].education;
