@@ -43,27 +43,41 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					console.log("User userIndex: " + userIndex);
 					if(userIndex == -1)	//This is a new user
 					{
-						$scope.name = "Unidentifed";
-						//$scope.summary = "Unidentifed";
 						newUser = true;
 						data.$add({
 							"id": userID,
-							name: "Unidentifed",
-							"avatar": "",
-							"address": "",
-							"industry": "",
-							"summary": "",
+							"name": "Your name",
+							"avatar": "http://i.imgur.com/s926uxF.png",
+							"headline": "Headline",
+							"address": "Address",
+							"industry": "Industry",
+							"summary": "Write something about you",
 							"experience": "",
 							"project": "",
 							"skills": "",
 							"education": ""
+						}).then(function()
+						{
+							console.log(data.length);
+							$scope.name = data[data.length -1].name;
+							$scope.avatar = data[data.length -1].avatar;
+							$scope.headline = data[data.length -1].headline;
+							$scope.address = data[data.length -1].address;
+							$scope.industry = data[data.length -1].industry;
+							$scope.summary = data[data.length -1].summary;
+							// console.log("exp:" + $scope.experience);
+
 						});
+						console.log(data[data.length -1].headline);
+
+					
 					}
 					else //This user has a profile
 					{
 						console.log(userIndex);
 						$scope.name = data[userIndex].name;
 						$scope.avatar = data[userIndex].avatar;
+						$scope.headline = data[userIndex].headline;
 						$scope.address = data[userIndex].address;
 						$scope.industry = data[userIndex].industry;
 						//if (data[userIndex].summary == null)
@@ -136,7 +150,6 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 				var user = data[data.length - 1];
 				user.avatar = $scope.avatar;
 				data.$save(user);
-				console.log("Saved new name");
 			}
 			else
 			{
@@ -325,19 +338,21 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			console.log($("#editTextHeadline").val());
 			$("#editTextHeadline").hide();
 			$("#textHeadline").show();
-			/*if(newUser)
+			$scope.headline = $("#textHeadline").text();
+			if(newUser)
 			{
 				var user = data[data.length - 1];
-				user.headline = $scope.name;
+				console.log(data[data.length - 1].headline + " " + user.headline);
+				user.headline = $scope.headline;
 				data.$save(user);
-				console.log("Saved new name");
+				console.log("Saved new headline of " + $scope.headline);
 			}
 			else
 			{
 				var user = data[userIndex];
-				user.name = $scope.name;
+				user.headline = $scope.headline;
 				data.$save(user);
-			}*/
+			}
 			
 		}
 
@@ -542,6 +557,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 
 		$scope.addExperience = function()
 		{
+			console.log("add exp request");
 			$("#editCompany").val("");
 			$("#editPosition").val("");
 			$("#editDuration").val("");
