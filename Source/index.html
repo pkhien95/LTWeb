@@ -12,7 +12,8 @@
 		<script src="js/jquery.min.js"></script>
 		<script src="js/userauth.js"></script>
 		<script src="js/googleAnalytics.js"></script>
-  
+		<script src="js/jspdf.min.js"></script>
+		<script src="js/addimage.js"></script>
 	</head>
 	<body>
 
@@ -236,7 +237,7 @@
 				<div class="summary container-fluid" id="summaryInfo">
 					<div class="profile-card-top container-fluid">
 						<div class="col-md-4 profile-image">
-							<img class="image" ng-src="{{avatar}}" alt="profile-image">
+							<img crossOrigin="Anonymous" class="image" ng-src="{{avatar}}" alt="profile-image" id="avatar">
 							<button class="button" ng-click="editPhoto()">Change photo</button>
 							<!-- <input type="file" id="changePhotoInput" data-bind-file="" data-ng-model="avatar"></input>
  -->
@@ -634,7 +635,18 @@
 
 					</div>
 				</div>
+
 			</div>
+			<div class="downloadContainer container-fluid">
+				<h3 class="text-center">Completed your CV ? Press button below to save it to your computer !</h3>
+				<div class="container-fluid">
+					<div class="col-md-4"></div>
+					<button class="btn btn-primary col-md-4" id="btnDownload" ng-click="download()">Download CV as PDF</button>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+
+			<canvas id="myCanvas"/>
 
 			<!--Gap right-->
 			<div class="col-md-1"></div>

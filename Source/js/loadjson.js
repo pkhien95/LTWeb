@@ -14,13 +14,14 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 		$scope.industry = "";
 		$scope.summary = "";
 		$scope.experience = [];
-		$scope.headline = "";
+		$scope.headline = [];
 		$scope.current = [];
 		$scope.previous = [];
 		$scope.project = "";
 		$scope.skills = "";
 		$scope.education = "";
 		$scope.index = 0;
+		$scope.dataURL="";
 		var newUser = true;
 		var ref = new Firebase('https://cvcreator.firebaseio.com/profile');
 		var data = $firebaseArray(ref);
@@ -457,8 +458,6 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			}
 			$scope.index = index;
 			console.log($scope.index);
-			
-			
 		}
 
 		$scope.deleteExp = function(index)
@@ -508,7 +507,10 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 				if(newUser)
 				{
 					var user = data[data.length - 1];
-					user.experience = [];
+					if(user.experience == "")
+					{
+						user.experience = [];
+					}
 					user.experience.push(temp);
 					data.$save(user);
 					$scope.experience = data[data.length - 1].experience;
@@ -520,6 +522,7 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 					{
 						user.experience = [];
 					}
+					console.log(data.userIndex + " " + userIndex);
 					user.experience.push(temp);
 					data.$save(user);
 					$scope.experience = data[userIndex].experience;
@@ -686,7 +689,10 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 				if(newUser)
 				{
 					var user = data[data.length - 1];
-					user.project = [];
+					if(user.project == "")
+					{
+						user.project = [];
+					}
 					user.project.push(temp);
 					data.$save(user);
 					$scope.project = data[data.length - 1].project;
@@ -780,7 +786,10 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 				if(newUser)
 				{
 					var user = data[data.length - 1];
-					user.skills = [];
+					if(user.skills == "")
+					{
+						user.skills = [];
+					}
 					user.skills.push(temp);
 					data.$save(user);
 					$scope.skills = data[data.length - 1].skills;
@@ -891,7 +900,10 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 				if(newUser)
 				{
 					var user = data[data.length - 1];
-					user.education = [];
+					if(user.education == "")
+					{
+						user.education = [];
+					}
 					user.education.push(temp);
 					data.$save(user);
 					$scope.education = data[data.length - 1].education;
@@ -948,6 +960,268 @@ app.controller("userProfile", ["$scope", "$firebaseArray",
 			$("#modalEducation").modal('toggle');
 			
 			$scope.index = -1;
+		}
+
+		//Download as PDF
+		$scope.download = function()
+		{
+			console.log("Download request.");
+			createPDF();
+		}
+
+		function createPDF()
+		{
+
+			var doc = new jsPDF("p", "pt", 'a4');
+			var avatar = document.getElementById("avatar");
+			doc.addImage(getBase64Image(avatar), 50, 50, 150, 150);
+			console.log(avatar.width + " X " + avatar.height);
+			
+			//Name
+			doc.setFontSize(30);
+			doc.text(245, 80, $scope.name);
+
+			//Headline
+			doc.setFontSize(16);
+			doc.setFontType("italic");
+			doc.setTextColor(100);
+			doc.text(245, 100, $scope.headline);
+
+			//Address and Industry
+			doc.setFontType("normal");
+			doc.setFontSize(12);
+			doc.setTextColor(100);
+			doc.text(245, 120, $scope.address + " | " + $scope.industry);
+
+			//Current
+			var currentText = "Current: ";
+			for(var i = 0; i < $scope.current.length; i++)
+			{
+				currentText += $scope.current[i].company;
+				if(i < 4 && i < $scope.current.length - 1)
+				{
+					currentText += ", ";
+				}
+				if(i == 4)
+				{
+					if($scope.current.length > 5)
+					{
+						currentText += ",...";
+					}
+				}
+			}
+			doc.setTextColor(0);
+			doc.text(245, 160, currentText);
+
+
+			//Previous
+			var previousText = "Previous: ";
+			for(var i = 0; i < $scope.previous.length; i++)
+			{
+				previousText += $scope.previous[i].company;
+				if(i < 4 && i < $scope.previous.length - 1)
+				{
+					previousText += ", ";
+				}
+				if(i == 4)
+				{
+					if($scope.previous.length > 5)
+					{
+						previousText += ",...";
+					}
+				}
+			}
+			doc.setTextColor(0);
+			doc.text(245, 180, previousText);
+
+
+			//Education (small)
+			var educationText = "Education: ";
+			for(var i = 0; i < $scope.education.length; i++)
+			{
+				educationText += $scope.education[i].school;
+				if(i < 4 && i < $scope.education.length - 1)
+				{
+					educationText += ", ";
+				}
+				if(i == 4)
+				{
+					if($scope.education.length > 5)
+					{
+						educationText += ",...";
+					}
+				}
+			}
+			doc.setTextColor(0);
+			doc.text(245, 200, educationText);
+
+			//Summary
+			doc.setDrawColor(0);
+			doc.setFillColor(200);
+			doc.rect(50, 210, 495, 25, 'F'); 
+
+			doc.setFontType("bold");
+			doc.setFont("times");
+			doc.setFontSize("20");
+			doc.text(50, 230, "Summary");
+			//
+			doc.setFontType("normal");
+			doc.setFontSize(12);
+			doc.text(60, 250, $scope.summary);
+
+			//Experience
+			doc.setDrawColor(0);
+			doc.setFillColor(200);
+			doc.rect(50, 280, 495, 25, 'F'); 
+
+			doc.setFontType("bold");
+			doc.setFont("times");
+			doc.setFontSize("20");
+			doc.text(50, 300, "Experience");
+			//
+			var  y = 320;
+			for(var i = 0; i < $scope.experience.length; i++)
+			{
+				if(i == 4)
+				{
+					break;
+				}
+
+				doc.setFontType("bold");
+				doc.setFontSize(14);
+				doc.text(60, y, $scope.experience[i].company);
+
+				y += 15;
+				doc.setFontType("normal");
+				doc.setFontSize(12);
+				doc.setTextColor(100);
+				doc.text(60, y, $scope.experience[i].position);
+
+				y += 15;
+				doc.setFontType("normal");
+				doc.setFontSize(12);
+				doc.setTextColor(0);
+				doc.text(60, y, $scope.experience[i].duration);
+				y+= 30;
+			}
+
+			y += 20;
+
+			//Project
+			doc.setDrawColor(0);
+			doc.setFillColor(200);
+			doc.rect(50, y - 20, 495, 25, 'F'); 
+
+			doc.setFontType("bold");
+			doc.setFont("times");
+			doc.setFontSize("20");
+			doc.text(50, y, "Project");
+
+			y += 20;
+			for(var i = 0; i < $scope.project.length; i++)
+			{
+				if(i == 4)
+				{
+					break;
+				}
+
+				doc.setFontType("bold");
+				doc.setFontSize(14);
+				doc.text(60, y, $scope.project[i].name);
+
+				y += 15;
+				doc.setFontType("normal");
+				doc.setFontSize(12);
+				doc.setTextColor(0);
+				doc.text(60, y, $scope.project[i].detail);
+				y+= 30;
+			}
+
+			y += 20;
+
+			//Skill
+			doc.setDrawColor(0);
+			doc.setFillColor(200);
+			doc.rect(50, y - 20, 495, 25, 'F'); 
+
+			doc.setFontType("bold");
+			doc.setFont("times");
+			doc.setFontSize("20");
+			doc.text(50, y, "Skills");
+
+			y += 20;
+			for(var i = 0; i < $scope.skills.length; i++)
+			{
+				if(i == 4)
+				{
+					break;
+				}
+
+				doc.setFontType("normal");
+				doc.setFontSize(14);
+				doc.text(60, y, $scope.skills[i].name);
+				y+= 30;
+			}
+
+			y += 20;
+
+			//Education
+			doc.setDrawColor(0);
+			doc.setFillColor(200);
+			doc.rect(50, y - 20, 495, 25, 'F'); 
+
+			doc.setFontType("bold");
+			doc.setFont("times");
+			doc.setFontSize("20");
+			doc.text(50, y, "Education");
+
+			y += 20;
+			for(var i = 0; i < $scope.education.length; i++)
+			{
+				if(i == 4)
+				{
+					break;
+				}
+
+				doc.setFontType("bold");
+				doc.setFontSize(14);
+				doc.text(60, y, $scope.education[i].school);
+
+				y += 15;
+				doc.setFontType("normal");
+				doc.setFontSize(12);
+				doc.setTextColor(100);
+				doc.text(60, y, $scope.education[i].certificate);
+
+				y += 15;
+				doc.setFontType("normal");
+				doc.setFontSize(12);
+				doc.setTextColor(0);
+				doc.text(60, y, $scope.education[i].duration);
+
+				y+= 30;
+			}
+
+			//Export
+			doc.save("cvcreator.pdf")
+
+		}
+
+		//Convert image to data URL
+		function getBase64Image(img) 
+		{
+			// Create an empty canvas element
+			var canvas = document.createElement("canvas");
+			canvas.width = img.width;
+			canvas.height = img.height;
+			console.log("canvas: " + canvas.width + "x" + canvas.height);
+			// Copy the image contents to the canvas
+			var ctx = canvas.getContext("2d");
+			ctx.drawImage(img, 0, 0, img.width, img.height);
+
+			var dataURL = canvas.toDataURL("image/jpeg");
+			return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+
 		}
 
 	}

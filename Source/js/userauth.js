@@ -5,6 +5,8 @@ function authDataCallback(authData) {
 		console.log("User " + authData.uid + " is logged in with " + authData.provider);
 		$("#summaryInfo").show();
 		$("#backgroundInfo").show();
+		$(".downloadContainer").show();
+		
 		loggedIn = true;
 
 		//Show current user
@@ -45,6 +47,7 @@ $(document).ready(function()
 		$("#summaryInfo").hide();
 		$("#backgroundInfo").hide();
 		$(".currentUser").hide();
+		$(".downloadContainer").hide();
 		
 		//Show log in modal
 		$("#modalLogin").modal("show");
@@ -65,6 +68,7 @@ $(document).ready(function()
 		$("#summaryInfo").hide();
 		$("#backgroundInfo").hide();
 		$(".currentUser").hide();
+		$(".downloadContainer").hide();
 
 		//Show log in modal
 		$("#modalLogin").modal("show");
